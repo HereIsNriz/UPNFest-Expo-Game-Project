@@ -5,26 +5,56 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     // Property
+    public bool IsGameRunning;
 
     // SerializeField
-    [SerializeField] private bool m_isGameRunning;
+    [SerializeField] private GameObject m_goodBulletPrefab;
 
     // Field
+    private Queue<GameObject> m_goodBulletPool = new Queue<GameObject>();
+    private int m_poolSize = 10;
 
     private void Awake()
     {
-        Time.timeScale = 1.0f;
+        for (int i = 0; i < m_poolSize; i++)
+        {
+            StoreGoodBulletIntoPool();
+        }
     }
-
-    // Start is called before the first frame update
     void Start()
     {
-        m_isGameRunning = true;
+        IsGameRunning = true;
     }
-
-    // Update is called once per frame
     void Update()
     {
         
+    }
+    public void GameWin()
+    {
+        IsGameRunning = false;
+    }
+    public void GameOver()
+    {
+        IsGameRunning = false;
+    }
+    // Good Bullet Pool
+    private GameObject StoreGoodBulletIntoPool()
+    {
+        GameObject goodBullet = Instantiate(m_goodBulletPrefab);
+        goodBullet.gameObject.SetActive(false);
+        m_goodBulletPool.Enqueue(goodBullet);
+        return goodBullet;
+    }
+    public GameObject ShootGoodBullet(Vector2 position, Quaternion rotation)
+    {
+        GameObject goodBullet = m_goodBulletPool.Count > 0 ? m_goodBulletPool.Dequeue() : StoreGoodBulletIntoPool();
+        goodBullet.gameObject.transform.SetPositionAndRotation(position, rotation);
+        goodBullet.gameObject.SetActive(true);
+        return goodBullet;
+    }
+    public void ReturnGoodBulletIntoPool(GameObject goodBullet)
+    {
+        goodBullet.gameObject.SetActive(false);
+        m_goodBulletPool.Enqueue(goodBullet);
     }
 }
