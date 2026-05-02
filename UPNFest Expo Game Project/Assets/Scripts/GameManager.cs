@@ -9,9 +9,11 @@ public class GameManager : MonoBehaviour
 
     // SerializeField
     [SerializeField] private GameObject m_goodBulletPrefab;
+    [SerializeField] private GameObject m_badBulletPrefab;
 
     // Field
     private Queue<GameObject> m_goodBulletPool = new Queue<GameObject>();
+    private Queue<GameObject> m_badBulletPool = new Queue<GameObject>();
     private int m_poolSize = 10;
 
     private void Awake()
@@ -19,6 +21,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < m_poolSize; i++)
         {
             StoreGoodBulletIntoPool();
+            StoreBadBulletIntoPool();
         }
     }
     void Start()
@@ -33,7 +36,7 @@ public class GameManager : MonoBehaviour
     {
         IsGameRunning = false;
     }
-    public void GameOver()
+    private void GameOver()
     {
         IsGameRunning = false;
     }
@@ -56,5 +59,25 @@ public class GameManager : MonoBehaviour
     {
         goodBullet.gameObject.SetActive(false);
         m_goodBulletPool.Enqueue(goodBullet);
+    }
+    // Bad Bullet Pool
+    private GameObject StoreBadBulletIntoPool()
+    {
+        GameObject badBullet = Instantiate(m_badBulletPrefab);
+        badBullet.gameObject.SetActive(false);
+        m_badBulletPool.Enqueue(badBullet);
+        return badBullet;
+    }
+    public GameObject ShootBadBullet(Vector2 position, Quaternion rotation)
+    {
+        GameObject badBullet = m_badBulletPool.Count > 0 ? m_badBulletPool.Dequeue() : StoreBadBulletIntoPool();
+        badBullet.gameObject.transform.SetPositionAndRotation(position, rotation);
+        badBullet.gameObject.SetActive(true);
+        return badBullet;
+    }
+    public void ReturnBadBulletIntoPool(GameObject badBullet)
+    {
+        badBullet.gameObject.SetActive(false);
+        m_badBulletPool.Enqueue(badBullet);
     }
 }
