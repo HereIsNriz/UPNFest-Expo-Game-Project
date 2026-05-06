@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,11 +12,16 @@ public class GameManager : MonoBehaviour
     // SerializeField
     [SerializeField] private GameObject m_goodBulletPrefab;
     [SerializeField] private GameObject m_badBulletPrefab;
+    [SerializeField] private GameObject m_gameWinPanel;
+    [SerializeField] private GameObject m_gameOverPanel;
+    [SerializeField] private TextMeshProUGUI m_numOfPlayerSurvivedText;
 
     // Field
     private Queue<GameObject> m_goodBulletPool = new Queue<GameObject>();
     private Queue<GameObject> m_badBulletPool = new Queue<GameObject>();
+    private GameObject[] m_players;
     private int m_poolSize = 10;
+    private int m_numOfPlayerSurvived;
 
     private void Awake()
     {
@@ -30,15 +37,37 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        
+        m_players = GameObject.FindGameObjectsWithTag("Player");
+        DetectNumberOfPlayer();
     }
     public void GameWin()
     {
-        IsGameRunning = false;
+        if (IsGameRunning)
+        {
+            m_gameWinPanel.gameObject.SetActive(true);
+            m_numOfPlayerSurvivedText.text = $"Player Survived: {m_numOfPlayerSurvived}";
+            IsGameRunning = false;
+        }
     }
     private void GameOver()
     {
-        IsGameRunning = false;
+        if (IsGameRunning)
+        {
+            m_gameOverPanel.gameObject.SetActive(true);
+            IsGameRunning = false;
+        }
+    }
+    private void DetectNumberOfPlayer()
+    {
+        m_numOfPlayerSurvived = m_players.Length;
+        if (m_numOfPlayerSurvived <= 0)
+        {
+            GameOver();
+        }
+    }
+    public void PressBackButton()
+    {
+        SceneManager.LoadScene(1);
     }
     // Good Bullet Pool
     private GameObject StoreGoodBulletIntoPool()

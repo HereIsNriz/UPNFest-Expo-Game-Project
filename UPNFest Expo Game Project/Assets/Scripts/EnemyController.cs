@@ -43,4 +43,11 @@ public class EnemyController : MonoBehaviour
         float randomXAxis = Random.Range(-m_minMaxXAxis, m_minMaxXAxis);
         return new Vector2(randomXAxis, m_minYAxis);
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("GoodBullet"))
+        {
+            m_lives--;
+        }
+    }
 }
