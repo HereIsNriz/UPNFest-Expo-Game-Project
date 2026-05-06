@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
     // SerializeField
     [SerializeField] private GameObject m_bulletOutPosition;
+    [SerializeField] protected Slider m_playerLivesSlider;
     [SerializeField] private int m_lives;
     [SerializeField] private float m_speed;
     [SerializeField] private string m_playerCode;
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        m_playerLivesSlider.maxValue = m_lives;
         m_playerRb = GetComponent<Rigidbody2D>();
         m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
@@ -34,6 +37,7 @@ public class PlayerController : MonoBehaviour
         ShootBullet();
         if (m_lives <= 0) // Player die
         {
+            m_playerLivesSlider.gameObject.SetActive(false);
             Destroy(gameObject);
         }
     }
@@ -52,6 +56,11 @@ public class PlayerController : MonoBehaviour
             m_horizontalInput = Input.GetAxis("HorizontalP" + m_playerCode);
             m_verticalInput = Input.GetAxis("VerticalP" + m_playerCode);
             m_playerPosition = new Vector2(m_horizontalInput, m_verticalInput).normalized;
+            m_playerLivesSlider.value = m_lives;
+        }
+        else
+        {
+            m_playerLivesSlider.gameObject.SetActive(false);
         }
     }
     private void ClampPlayerPosition()
