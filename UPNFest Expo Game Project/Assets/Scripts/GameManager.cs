@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     // SerializeField
     [SerializeField] private GameObject m_goodBulletPrefab;
     [SerializeField] private GameObject m_badBulletPrefab;
+    [SerializeField] private GameObject m_superBadBulletPrefab;
     [SerializeField] private GameObject m_gameWinPanel;
     [SerializeField] private GameObject m_gameOverPanel;
     [SerializeField] private TextMeshProUGUI m_numOfPlayerSurvivedText;
@@ -22,11 +23,18 @@ public class GameManager : MonoBehaviour
     private Queue<GameObject> m_goodBulletPool = new Queue<GameObject>();
     private Queue<GameObject> m_badBulletPool = new Queue<GameObject>();
     private GameObject[] m_players;
+    private GameObject m_superBadBullet;
     private int m_poolSize = 10;
     private int m_numOfPlayerSurvived;
+    private int m_randomMin = 1;
+    private int m_randomMax = 2;
+    private float m_ultimateDelay = 15f;
+    private float m_ultimatePositionX = 4.5f;
+    private float m_ultimatePositionY = 10f;
 
     private void Awake()
     {
+        InitSuperBadBullet();
         for (int i = 0; i < m_poolSize; i++)
         {
             StoreGoodBulletIntoPool();
@@ -36,6 +44,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         IsGameRunning = true;
+        StartCoroutine(UseUltimate());
     }
     void Update()
     {
@@ -72,6 +81,21 @@ public class GameManager : MonoBehaviour
     public void PressBackButton()
     {
         SceneManager.LoadScene(1);
+    }
+    private IEnumerator UseUltimate()
+    {
+        while (IsGameRunning)
+        {
+            yield return new WaitForSeconds(m_ultimateDelay);
+            Vector2 firtPosition = new Vector2(-m_ultimatePositionX, m_ultimatePositionY);
+            Vector2 secondPosition = new Vector2(m_ultimatePositionX, m_ultimatePositionY);
+            Vector2 fixedPosition = SetRandomIndex() == 1 ? firtPosition : secondPosition;
+            ShootSuperBadBullet(fixedPosition, Quaternion.identity);
+        }
+    }
+    private int SetRandomIndex()
+    {
+        return Random.Range(m_randomMin, m_randomMax + 1);
     }
     // Good Bullet Pool
     private GameObject StoreGoodBulletIntoPool()
@@ -112,5 +136,22 @@ public class GameManager : MonoBehaviour
     {
         badBullet.gameObject.SetActive(false);
         m_badBulletPool.Enqueue(badBullet);
+    }
+    // Super Bad Bullet Init
+    private GameObject InitSuperBadBullet()
+    {
+        m_superBadBullet = Instantiate(m_superBadBulletPrefab);
+        m_superBadBullet.gameObject.SetActive(false);
+        return m_superBadBullet;
+    }
+    private GameObject ShootSuperBadBullet(Vector2 position, Quaternion rotation)
+    {
+        m_superBadBullet.gameObject.transform.SetPositionAndRotation(position, rotation);
+        m_superBadBullet.gameObject.SetActive(true);
+        return m_superBadBullet;
+    }
+    public void ReturnSuperBadBullet()
+    {
+        m_superBadBullet.gameObject.SetActive(false);
     }
 }

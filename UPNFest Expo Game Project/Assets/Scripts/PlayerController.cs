@@ -80,6 +80,16 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    private void UseAbility()
+    {
+        if (m_gameManager.IsGameRunning)
+        {
+            if (Input.GetButtonDown("AbilityP" + m_playerCode))
+            {
+                //this.gameObject.transform.position = new Vector3(
+            }
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("BadBullet"))

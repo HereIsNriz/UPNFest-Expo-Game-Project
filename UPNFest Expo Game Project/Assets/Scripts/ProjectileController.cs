@@ -7,13 +7,16 @@ public class ProjectileController : MonoBehaviour
     // Property
 
     // SerializeField
+    [SerializeField] private bool m_isGoodBullet;
     [SerializeField] private bool m_isBadBullet;
+    [SerializeField] private bool m_isSuperBadBullet;
     [SerializeField] private float m_speed;
 
     // Field
     private GameManager m_gameManager;
     private Rigidbody2D m_bulletRb;
     private float m_minMaxYAxis = 6f;
+    private float m_minYAxis = 10f;
 
     void Start()
     {
@@ -25,6 +28,7 @@ public class ProjectileController : MonoBehaviour
     {
         ReturnGoodProjectile();
         ReturnBadProjectile();
+        ReturnSuperBadProjectile();
     }
     private void FixedUpdate()
     {
@@ -33,21 +37,21 @@ public class ProjectileController : MonoBehaviour
     }
     private void MoveProjectileUp()
     {
-        if (!m_isBadBullet)
+        if (m_isGoodBullet)
         {
             m_bulletRb.velocity = Vector2.up * m_speed * Time.deltaTime;
         }
     }
     private void ReturnGoodProjectile()
     {
-        if (!m_isBadBullet && (transform.position.y >= m_minMaxYAxis))
+        if (m_isGoodBullet && (transform.position.y >= m_minMaxYAxis))
         {
             m_gameManager.ReturnGoodBulletIntoPool(this.gameObject);
         }
     }
     private void MoveProjectileDown()
     {
-        if (m_isBadBullet)
+        if (m_isBadBullet || m_isSuperBadBullet)
         {
             m_bulletRb.velocity = Vector2.down * m_speed * Time.deltaTime;
         }
@@ -59,6 +63,13 @@ public class ProjectileController : MonoBehaviour
             m_gameManager.ReturnBadBulletIntoPool(this.gameObject);
         }
     }
+    private void ReturnSuperBadProjectile()
+    {
+        if (m_isSuperBadBullet && (transform.position.y <= -m_minYAxis))
+        {
+            m_gameManager.ReturnSuperBadBullet();
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (m_isBadBullet)
@@ -68,7 +79,14 @@ public class ProjectileController : MonoBehaviour
                 m_gameManager.ReturnBadBulletIntoPool(this.gameObject);
             }
         }
-        else
+        if (m_isSuperBadBullet)
+        {
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                m_gameManager.ReturnSuperBadBullet();
+            }
+        }
+        if (m_isGoodBullet)
         {
             if (collision.gameObject.CompareTag("Enemy"))
             {
