@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject m_gameWinPanel;
     [SerializeField] private GameObject m_gameOverPanel;
     [SerializeField] private TextMeshProUGUI m_numOfPlayerSurvivedText;
+    [SerializeField] private Slider m_bossLivesSlider;
 
     // Field
     private Queue<GameObject> m_goodBulletPool = new Queue<GameObject>();
@@ -44,6 +46,7 @@ public class GameManager : MonoBehaviour
     {
         if (IsGameRunning)
         {
+            m_bossLivesSlider.gameObject.SetActive(false);
             m_gameWinPanel.gameObject.SetActive(true);
             m_numOfPlayerSurvivedText.text = $"Player Survived: {m_numOfPlayerSurvived}";
             IsGameRunning = false;
@@ -53,6 +56,7 @@ public class GameManager : MonoBehaviour
     {
         if (IsGameRunning)
         {
+            m_bossLivesSlider.gameObject.SetActive(false);
             m_gameOverPanel.gameObject.SetActive(true);
             IsGameRunning = false;
         }

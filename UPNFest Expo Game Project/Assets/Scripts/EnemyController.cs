@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class EnemyController : MonoBehaviour
 
     // SerializeField
     [SerializeField] private int m_lives;
+    [SerializeField] private Slider m_bossLivesSlider;
 
     // Field
     private GameManager m_gameManager;
@@ -18,6 +20,7 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_bossLivesSlider.maxValue = m_lives;
         m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         StartCoroutine(ShootBullet());
     }
@@ -25,6 +28,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        m_bossLivesSlider.value = m_lives;
         if (m_lives <= 0)
         {
             m_gameManager.GameWin();
