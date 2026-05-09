@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
 
     // Field
     private GameManager m_gameManager;
-    private float m_attackSpeed = 2f;
+    private float m_attackSpeed = 1.5f;
     private float m_minMaxXAxis = 8f;
     private float m_minYAxis = 6.5f;
 
