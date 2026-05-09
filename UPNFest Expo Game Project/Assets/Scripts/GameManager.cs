@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject m_superBadBulletPrefab;
     [SerializeField] private GameObject m_gameWinPanel;
     [SerializeField] private GameObject m_gameOverPanel;
+    [SerializeField] private GameObject m_teleportPointPosition;
     [SerializeField] private TextMeshProUGUI m_numOfPlayerSurvivedText;
     [SerializeField] private Slider m_bossLivesSlider;
 
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
     private float m_ultimateDelay = 15f;
     private float m_ultimatePositionX = 4.5f;
     private float m_ultimatePositionY = 10f;
+    private float m_teleportPointX = 5f;
+    private float m_teleportPointY = 1f;
 
     private void Awake()
     {
@@ -87,15 +90,18 @@ public class GameManager : MonoBehaviour
         while (IsGameRunning)
         {
             yield return new WaitForSeconds(m_ultimateDelay);
+            int randomIndex = Random.Range(m_randomMin, m_randomMax + 1);
             Vector2 firtPosition = new Vector2(-m_ultimatePositionX, m_ultimatePositionY);
             Vector2 secondPosition = new Vector2(m_ultimatePositionX, m_ultimatePositionY);
-            Vector2 fixedPosition = SetRandomIndex() == 1 ? firtPosition : secondPosition;
+            Vector2 fixedPosition = randomIndex == 1 ? firtPosition : secondPosition;
             ShootSuperBadBullet(fixedPosition, Quaternion.identity);
+
+            Vector2 firstSavePosition = new Vector2(-m_teleportPointX, -m_teleportPointY);
+            Vector2 secondSavePosition = new Vector2(m_teleportPointX, -m_teleportPointY);
+            Vector2 fixedSavePosition = randomIndex == 1 ? secondSavePosition : firstSavePosition;
+            m_teleportPointPosition.gameObject.transform.position = fixedSavePosition;
+            m_teleportPointPosition.gameObject.SetActive(true);
         }
-    }
-    private int SetRandomIndex()
-    {
-        return Random.Range(m_randomMin, m_randomMax + 1);
     }
     // Good Bullet Pool
     private GameObject StoreGoodBulletIntoPool()
@@ -153,5 +159,6 @@ public class GameManager : MonoBehaviour
     public void ReturnSuperBadBullet()
     {
         m_superBadBullet.gameObject.SetActive(false);
+        m_teleportPointPosition.gameObject.SetActive(false);
     }
 }

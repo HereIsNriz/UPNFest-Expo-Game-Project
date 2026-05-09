@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
     // SerializeField
     [SerializeField] private GameObject m_bulletOutPosition;
+    [SerializeField] private GameObject m_teleportPointPosition;
     [SerializeField] protected Slider m_playerLivesSlider;
     [SerializeField] private int m_lives;
     [SerializeField] private float m_speed;
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
         TakePlayerData();
         ClampPlayerPosition();
         ShootBullet();
+        UseAbility();
         if (m_lives <= 0) // Player die
         {
             m_playerLivesSlider.gameObject.SetActive(false);
@@ -84,9 +86,21 @@ public class PlayerController : MonoBehaviour
     {
         if (m_gameManager.IsGameRunning)
         {
-            if (Input.GetButtonDown("AbilityP" + m_playerCode))
+            if (m_teleportPointPosition.gameObject.activeInHierarchy)
             {
-                //this.gameObject.transform.position = new Vector3(
+                if (Input.GetButton("AbilityP" + m_playerCode))
+                {
+                    if (this.m_playerCode == "1")
+                    {
+                        Vector2 player1Destination = (Vector2)m_teleportPointPosition.transform.position + Vector2.up;
+                        this.gameObject.transform.position = Vector2.MoveTowards(m_playerRb.position, player1Destination, m_speed * Time.deltaTime);
+                    }
+                    if (this.m_playerCode == "2")
+                    {
+                        Vector2 player2Destination = (Vector2)m_teleportPointPosition.transform.position + Vector2.down;
+                        this.gameObject.transform.position = Vector2.MoveTowards(m_playerRb.position, player2Destination, m_speed * Time.deltaTime);
+                    }
+                }
             }
         }
     }
