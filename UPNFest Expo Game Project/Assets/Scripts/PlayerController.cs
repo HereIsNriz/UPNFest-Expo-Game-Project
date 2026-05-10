@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject m_teleportPointPosition;
     [SerializeField] private Slider m_playerLivesSlider;
     [SerializeField] private AudioSource m_useAbilitySound;
+    [SerializeField] private AudioSource m_hitSound;
     [SerializeField] private int m_lives;
     [SerializeField] private float m_speed;
     [SerializeField] private string m_playerCode;
@@ -113,6 +114,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BadBullet"))
         {
+            m_hitSound.PlayOneShot(m_hitSound.clip, 1f);
             m_lives--;
         }
     }
