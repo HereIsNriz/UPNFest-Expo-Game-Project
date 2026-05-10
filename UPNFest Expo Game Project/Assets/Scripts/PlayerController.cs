@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
     // SerializeField
     [SerializeField] private GameObject m_bulletOutPosition;
     [SerializeField] private GameObject m_teleportPointPosition;
-    [SerializeField] protected Slider m_playerLivesSlider;
+    [SerializeField] private Slider m_playerLivesSlider;
+    [SerializeField] private AudioSource m_useAbilitySound;
     [SerializeField] private int m_lives;
     [SerializeField] private float m_speed;
     [SerializeField] private string m_playerCode;
@@ -100,6 +101,10 @@ public class PlayerController : MonoBehaviour
                         Vector2 player2Destination = (Vector2)m_teleportPointPosition.transform.position + Vector2.down;
                         this.gameObject.transform.position = Vector2.MoveTowards(m_playerRb.position, player2Destination, m_speed * Time.deltaTime);
                     }
+                }
+                if (Input.GetButtonDown("AbilityP" + m_playerCode))
+                {
+                    m_useAbilitySound.PlayOneShot(m_useAbilitySound.clip, 1f);
                 }
             }
         }
