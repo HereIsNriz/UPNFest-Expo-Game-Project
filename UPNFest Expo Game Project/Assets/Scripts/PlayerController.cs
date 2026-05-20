@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Slider m_playerLivesSlider;
     [SerializeField] private AudioSource m_useAbilitySound;
     [SerializeField] private AudioSource m_hitSound;
+    [SerializeField] private AudioSource m_shootSound;
     [SerializeField] private int m_lives;
     [SerializeField] private float m_speed;
     [SerializeField] private string m_playerCode;
@@ -80,6 +81,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetButtonDown("FireP" + m_playerCode))
             {
+                m_shootSound.PlayOneShot(m_shootSound.clip, 1f);
                 m_gameManager.ShootGoodBullet(m_bulletOutPosition.transform.position, Quaternion.identity);
             }
         }
