@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,8 +76,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.5245282, g: 0, b: 0.40407854, a: 1}
+  m_Sprite: {fileID: 21300000, guid: fa9b59921dd31b4488ab5dace6aae65f, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -99,7 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32534fedbc099e6478d6458e600d018c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_isGoodBullet: 0
   m_isBadBullet: 1
+  m_isSuperBadBullet: 0
   m_speed: 250
 --- !u!58 &9033204520019601376
 CircleCollider2D:
@@ -133,9 +135,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0115574, y: 0.061641008}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.9584553
 --- !u!50 &2010142371975441757
 Rigidbody2D:
   serializedVersion: 4
