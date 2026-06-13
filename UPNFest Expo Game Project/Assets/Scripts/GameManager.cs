@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject m_teleportPointPosition;
     [SerializeField] private TextMeshProUGUI m_numOfPlayerSurvivedText;
     [SerializeField] private Slider m_bossLivesSlider;
+    [SerializeField] private AudioSource m_mainSceneMusic;
+    [SerializeField] private AudioSource m_gameWinSound;
 
     // Field
     private Queue<GameObject> m_goodBulletPool = new Queue<GameObject>();
@@ -58,6 +60,8 @@ public class GameManager : MonoBehaviour
     {
         if (IsGameRunning)
         {
+            m_mainSceneMusic.Stop();
+            m_gameWinSound.PlayOneShot(m_gameWinSound.clip, 1f);
             m_bossLivesSlider.gameObject.SetActive(false);
             m_gameWinPanel.gameObject.SetActive(true);
             m_numOfPlayerSurvivedText.text = $"Player Survived: {m_numOfPlayerSurvived}";
