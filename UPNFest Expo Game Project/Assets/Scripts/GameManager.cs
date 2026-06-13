@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Slider m_bossLivesSlider;
     [SerializeField] private AudioSource m_mainSceneMusic;
     [SerializeField] private AudioSource m_gameWinSound;
+    [SerializeField] private AudioSource m_gameLoseSound;
 
     // Field
     private Queue<GameObject> m_goodBulletPool = new Queue<GameObject>();
@@ -72,6 +73,8 @@ public class GameManager : MonoBehaviour
     {
         if (IsGameRunning)
         {
+            m_mainSceneMusic.Stop();
+            m_gameLoseSound.PlayOneShot(m_gameLoseSound.clip, 1f);
             m_bossLivesSlider.gameObject.SetActive(false);
             m_gameOverPanel.gameObject.SetActive(true);
             IsGameRunning = false;
