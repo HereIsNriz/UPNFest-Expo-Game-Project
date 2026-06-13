@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource m_mainSceneMusic;
     [SerializeField] private AudioSource m_gameWinSound;
     [SerializeField] private AudioSource m_gameLoseSound;
+    [SerializeField] private AudioSource m_backButtonClickedSound;
 
     // Field
     private Queue<GameObject> m_goodBulletPool = new Queue<GameObject>();
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
     private float m_ultimatePositionY = 10f;
     private float m_teleportPointX = 5f;
     private float m_teleportPointY = 1f;
+    private float m_buttonSoundDelay = 0.03f;
 
     private void Awake()
     {
@@ -88,9 +90,15 @@ public class GameManager : MonoBehaviour
             GameOver();
         }
     }
+    private IEnumerator BackButtonSound()
+    {
+        yield return new WaitForSeconds(m_buttonSoundDelay);
+        SceneManager.LoadScene(1);
+    }
     public void PressBackButton()
     {
-        SceneManager.LoadScene(1);
+        m_backButtonClickedSound.PlayOneShot(m_backButtonClickedSound.clip, 1f);
+        StartCoroutine(BackButtonSound());
     }
     private IEnumerator UseUltimate()
     {

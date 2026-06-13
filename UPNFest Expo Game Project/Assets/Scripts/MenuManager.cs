@@ -8,7 +8,11 @@ public class MenuManager : MonoBehaviour
 {
     // Property
     // SerializeField
+    [SerializeField] private AudioSource m_buttonsSound;
+
     // Field
+    private float m_buttonSoundDelay = 0.03f;
+
     void Start()
     {
         
@@ -17,12 +21,25 @@ public class MenuManager : MonoBehaviour
     {
         
     }
+    private IEnumerator PlayButtonSound()
+    {
+        yield return new WaitForSeconds(m_buttonSoundDelay);
+        SceneManager.LoadScene(0);
+    }
+    private IEnumerator ExitButtonSound()
+    {
+        yield return new WaitForSeconds(m_buttonSoundDelay);
+        EditorApplication.ExitPlaymode();
+        //Application.Quit();
+    }
     public void PressPlayButton()
     {
-        SceneManager.LoadScene(0);
+        m_buttonsSound.PlayOneShot(m_buttonsSound.clip, 1f);
+        StartCoroutine(PlayButtonSound());
     }
     public void PressExitButton()
     {
-        EditorApplication.ExitPlaymode();
+        m_buttonsSound.PlayOneShot(m_buttonsSound.clip, 1f);
+        StartCoroutine(ExitButtonSound());
     }
 }
